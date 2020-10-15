@@ -1,0 +1,640 @@
+---
+title: "Front of Pack Nutrition Labelling Consultation"
+author: "DHSC, Public Health Analysis, Edward Beake"
+date: "`r format(Sys.Date(),'%d %B %Y') `"
+output: 
+  html_document:
+    toc: yes
+    toc_depth: 4
+    toc_float: yes
+#    self_contained: no 
+---
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+if (!require(plotly)) install.packages('plotly')
+library(plotly)
+```
+
+This report gives a summary analysis of the responses to the Department of Health and Social Care (DHSC) [consultation](https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/807378/hfss-advertising-consultation-10-april-2019.pdf) on front of pack nutrition lables (FOP). It includes **`r nrow(Data)`** consultation responses.
+
+##Section 1 - Respondents
+
+**`r nrow(Data)`** consultation responses were analysed. These came from a range of individuals, organisations and businesses (these are self selected categories) and were either submitted online or via email:
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(responder_tot,align=rep('c', length(responder_tot))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote('Total percentage may not equal 100% due to rounding', notation = 'number')
+```
+
+Unless otherwise stated, the subsequent analysis in this report includes all respondent categories, individuals, organisations or businesses and responding either by email or online. The majority of analysis in this report is therefore primarily related to individuals.
+
+###1.1 - Individuals
+
+The **`r num_ind`** individuals who responded to the consultation were asked about a range of sociodemographic characteristics.
+
+####1.1.1 - Sector
+
+The `r num_ind` individuals were asked to identify the sector in which they work (these are self selected catogries). Consultation respondents came from a wide variety of professional sectors:
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(sector_ind,align=rep('c', length(sector_ind))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding', 
+               paste('The','...',  'individuals who did not specify the sector they work in are not included'),
+               paste('The', '...', 'individuals who specified the sector they work in as "other" are not included')),   
+               notation = 'number')     
+```
+
+####1.1.2 - Parent/Guardian
+
+The `r num_ind` individuals were asked to identify if they are a parent/guardian of a child under 16:
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(porg_ind,align=rep('c', length(porg_ind))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding',
+               paste('The','...','individuals who did not specify their parental status are not included')),
+               notation = 'number') 
+```
+
+####1.1.3 - Number of Children
+
+The `r nrow(Data %>% filter(Q17 == 'Yes'))` individuals who indentified as a parent/gaurdian were asked how many children under 16 they had:
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(nchild_ind,align=rep('c', length(nchild_ind))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),  
+               notation = 'number')   
+```
+
+####1.1.4 - Ethnicity
+
+The `r num_ind` individuals were asked to identify their ethnicity:
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(ethnicity_ind,align=rep('c', length(ethnicity_ind))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding',
+               paste('The','...','individuals who did not specify their ethnicity are not included'),
+               paste('The','...', 'individuals who specified thir ethnicity as "other" are not included')),
+               notation = 'number')
+```
+
+####1.1.5 - Disability
+
+The `r num_ind` individuals were asked to if they consider themselves to have a disability:
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(disability_ind,align=rep('c', length(disability_ind))) %>% 
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>%  
+  add_footnote(c('Total percentage may not equal 100% due to rounding',
+               paste('The','...','individuals who did not specify weather or not they have a disability are not included')),
+               notation = 'number') 
+```
+
+####1.1.6 - Long Term Health Condition
+
+The `r num_ind` individuals were asked to if they have a long term health condition:
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(lthc_ind,align=rep('c', length(lthc_ind))) %>% 
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>%  
+  add_footnote(c('Total percentage may not equal 100% due to rounding',
+               paste('The','...','individuals who did not specify weather or not they have a long term health condition are not included')),
+               notation = 'number') 
+```
+
+####1.1.7 - Income
+
+The `r num_ind` individuals were asked about their income:
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(income_ind,align=rep('c', length(income_ind))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding',
+               paste('The','...','individuals who did not specify their income are not included')),
+              notation = 'number')
+```
+
+###1.2 - Organisations
+
+The **`r num_o`** organisations who responded to the consultation were asked a range of questions about the organisation.
+
+####1.2.1 - Sector
+
+The `r num_o` organisations who responded were asked to identify the sector in which they work:
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(sector_o,align=rep('c', length(sector_o))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding',
+                 'Organisations who did not specify their sector are not included'),
+               notation = 'number')
+```
+
+####1.2.2 - Size
+
+The `r num_o` organisations who responded were asked about the number of employees the organisation has:
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(size_o,align=rep('c', length(size_o))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding',
+                 'Organisations who did not specify their size are not included'),
+               notation = 'number')
+```
+
+####1.2.3 - Location
+
+The `r num_o` organisations who responded were asked to about the location they operate in:
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(location_o,align=rep('c', length(location_o))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding',
+                 'Organisations who did not specify their location are not included'),
+               notation = 'number')
+```
+
+###1.3 - Businesses
+
+
+The **`r num_b`** buisnesses who responded to the consultation were asked a range of questions about the buisness
+
+####1.3.1 - Sector
+
+The `r num_b` buisnesses who responded were asked to identify the sector in which they work:
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(sector_b,align=rep('c', length(sector_b))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding',
+                 'Organisations who did not specify their sector are not included'),
+               notation = 'number')
+```
+
+####1.3.2 - Size
+
+The `r num_b` buisnesses who responded were asked about the number of employees the organisation has:
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(size_b,align=rep('c', length(size_b))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding',
+                 'Buisnesses who did not specify their size are not included'),
+               notation = 'number')
+```
+
+####1.3.3 - Location
+
+The `r num_b` buisnesses who responded were asked to about the location they operate in:
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(location_b,align=rep('c', length(location_b))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding',
+                 'Bisnesses who did not specify their location are not included'),
+               notation = 'number')
+```
+
+##Section 2 - Use of FOP lables 
+
+###2.1 - Food and drink buisnesses
+
+Buisnesses were asked if they feature a front of pack nutrition label on their products?
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(use_FOP,align=rep('c', length(use_FOP))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
+If they answered **yes**, they were asked if the label is the Government approved Multiple Traffic Light labelling (MTL) system?
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(use_MTL,align=rep('c', length(use_MTL))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
+If the buisness uses MTL, they were asked what percentage of their products use MTL?
+
+THEMED
+
+If the buisness uses MTL on less than 100% of products, they were asked which products do not use MTL and why?
+
+THEMED
+
+Buisnesses who use MTL were asked if they incurred costs over and above existing labelling cycles?
+
+THEMED
+
+Buisnesses who use MTL were asked if the introduction of MTL influenced any reformulation of your products?
+
+THEMED
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(MTL_reform,align=rep('c', length(MTL_reform))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding',
+                 'The ... buisnesses who did not answer this question are not included'),
+               notation = 'number')
+```
+
+If using FOPNL other than MTL, they were asked to explain what Front of Pack Nutrition Labelling your business features on its products and why you chose this label over the Government recommended label.
+
+THEMED
+
+If a different form of FOPNL is used, they were asked What percentage of their product portfolio carries this form of Front of Pack Nutrition Labelling?
+
+THEMED
+
+Buisnesses were asked if, in principle, their business would support a proposal to display the same Front of Pack Nutrition label on your products?
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(FOP_support,align=rep('c', length(FOP_support))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding',
+                 'The 2 buisnesses who did not answer this question are not included'),
+               notation = 'number')
+```
+
+###2.2 - Inderviduals and organisations
+
+Respodants were asked if they use the Multiple Traffic Light label to make choices about the food and drinks that buy?
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(MTL_use_p,align=rep('c', length(MTL_use_p))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
+And to explain their choice.
+
+THEMED
+
+Respondants were asked how they found the Multiple Traffic Light label
+
++ Clear
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(MTL_clear,align=rep('c', length(MTL_clear))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
++ Informative
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(MTL_informative,align=rep('c', length(MTL_informative))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
+Respondants were asked how easy they find the following components of the Multiple Traffic Light label?
+
++ Individual nutrients (fat, saturates, sugar, salt)
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(nutriants,align=rep('c', length(nutriants))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
++ Use of red, amber and green colours
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(color,align=rep('c', length(color))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
++ Reference intakes
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(ref,align=rep('c', length(ref))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
++ Portion size
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(p_size,align=rep('c', length(p_size))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
+Respondants were asked how Multiple Traffic Light labels could be made easier to use?
+
+THEMED
+
+Respondants were asked if they Would find it helpful if more products displayed the same Front of Pack Nutrition label?
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(same,align=rep('c', length(same))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
+
+##Section 3 - New International Examples
+
+###3.1 - Food and drink buisnesses
+
+Buisnesses were asked if they would be more likly to adopt one of the new international examples compared to the MTL lable?
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(FOP_adoption_b,align=rep('c', length(FOP_adoption_b))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
+###3.2 - Inderviduals and organisations
+
+Respondants were asked if they would be more likly to use one of the new international examples when shoping compared to the MTL lable?
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(FOP_adoption_io,align=rep('c', length(FOP_adoption_io))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
+If the respondant answered **yes** they were asked which new international example they were more likly to use?
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(ns_cwl,align=rep('c', length(ns_cwl))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
+###3.3 - All
+
+####3.3.1- Nutri-Score
+
+Respondants were asked what aspects of the Nutri-score lable they liked/disliked?
+
++ Use of 5 colours?
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(ns_color,align=rep('c', length(ns_color))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
++ Use of letters?
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(use_l,align=rep('c', length(use_l))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
++ Lack of specific nutrition information and portion size?
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(ni_ps,align=rep('c', length(ni_ps))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
++ Providing a single score for a product to indicate overall healthfulness?
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(single_score,align=rep('c', length(single_score))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
++ Any other comment
+
+THEMED
+
+####3.3.2 - Chilean health warning lable
+
+Respondants were asked what aspects of the Chilean health warning lable they liked/disliked?
+
++ Use of colour (black and white only)?
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(cwl_color,align=rep('c', length(cwl_color))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
++ Highlighting only less healthy options?
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(less_healthy,align=rep('c', length(less_healthy))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
++ Lack of specific nutrition information and portion size?
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(specific_ni,align=rep('c', length(specific_ni))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
++ Any other comment
+
+THEMED
+
+Both Nutri-Score and health warning labels have been introduced in countries around the world. Respontants were asked if they can provide any further evidence on the impact of these labels, on the following aspects?
+
++ Understanding or identification of healthier choices
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(identification,align=rep('c', length(identification))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
++ Healthier purchasing behaviours
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(purchasing,align=rep('c', length(purchasing))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
+Respondants were asked if there are any other Front of Pack Nutrition Labels that you think Government should consider? Please provide evidence on the following to explain your answer:
+
++ Understanding or identification of healthier choices
+
+THEMED
+
++ Healthier purchasing behaviours
+
+THEMED
+
+##Section 4 - Dietary Advice
+
+All respondants were asked if they think the Government should ensure that the recommended Front of Pack Nutrition label reflects latest dietary advice on free sugar?
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(free_sugar,align=rep('c', length(free_sugar))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
+Please explain
+
+THEMED
+
+All respondants were asked if they think the Government should ensure that the recomended Front of Pack Nutrition label reflects the latest dietary advice on fibre?
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(fiber,align=rep('c', length(fiber))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
+Please explain
+
+THEMED
+
+##Section 5 - Public Sector Equality Duty
+
+Do you think that Front of Pack Nutrition Labelling is likely to have an impact on people on the basis of their age, sex, race, religion, sexual orientation, pregnancy and maternity, disability, gender reassignment and marriage/civil partnership?
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(PSED1,align=rep('c', length(PSED1))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
+Please explain your answer and give evidence
+
+THEMED
+
+Do you think that any of the proposals in this consultation would help achieve any of the following aims?
+
++ Eliminating discrimination, harassment, victimisation and any other conduct that is prohibited by or under the Equality Act 2010
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(PSED2a,align=rep('c', length(PSED2a))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
++ Advancing equality of opportunity between persons who share a relevant protected characteristic and persons who do not share it?
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(PSED2b,align=rep('c', length(PSED2b))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
++ Fostering good relations between persons who share a relevant protected characteristic and persons who do not share it?
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(PSED2c,align=rep('c', length(PSED2c))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
+Please explain which aims it would help achieve and how. 
+
+THEMED
+
+Respondants were asked if the proposals be changed so that they are more effective? 
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(changes,align=rep('c', length(changes))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
+Please explain what changes would be needed.
+
+THEMED
+
+##Section 6 - Socioeconomic Considerations
+
+Respondants were asked if they think that the proposals in this consultation could impact on people from more deprived backgrounds?
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(deprived,align=rep('c', length(deprived))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
+Please explain your answer and provide relevant evidence.
+
+##Section 7 - Technical Annex
+
+Respondants were asked if they have any comments on the material provided in the technical annex?
+
++ on the provisional list of evaluation criteria? 
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(evaluation,align=rep('c', length(evaluation))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
+Please provide your comments
+
+THEMED
+
++ on the provisional list of costs and benefits?
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(costs_benifits,align=rep('c', length(costs_benifits))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
+Please provide your comments
+
+THEMED
+
++ on the evidence and commentary provided for the labelling schemes?
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=5}
+ kable(labelling,align=rep('c', length(labelling))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), font_size = 12,full_width = FALSE) %>% 
+  add_footnote(c('Total percentage may not equal 100% due to rounding'),
+               notation = 'number')
+```
+
+Please provide your comments
+
+THEMED
